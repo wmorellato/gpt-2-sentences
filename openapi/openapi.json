@@ -1,0 +1,159 @@
+{
+    "openapi": "3.0.2",
+    "info": {
+        "title": "GPT2 Sentences API",
+        "description": "API for consuming GPT2 generated sentences.",
+        "version": "1.0",
+        "contact": {
+            "name": "Weslley Morellato Bueno",
+            "email": "weslley.morellato@gmail.com"
+        }
+    },
+    "servers": [
+        {"url": "https://localhost:5000/v1"}
+    ],
+    "components": {
+        "schemas": {
+            "rating": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "description": "Sentence id."
+                    },
+                    "rating": {
+                        "type": "integer",
+                        "enum": [-1, 1],
+                        "description": "Integer describing the rating. +1 is good. -1 is bad."
+                    }
+                }
+            },
+            "sentence": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "description": "Sentence id."
+                    },
+                    "text": {
+                        "type": "string",
+                        "description": "Sentence text."
+                    },
+                    "genre": {
+                        "type": "string",
+                        "description": "Sentence genre."
+                    },
+                    "created": {
+                        "type": "string",
+                        "format": "date-time",
+                        "description": "When was the sentence created."
+                    },
+                    "rating": {
+                        "type": "integer",
+                        "description": "Overall rating of the sentence."
+                    },
+                    "modelVersion": {
+                        "type": "integer",
+                        "description": "The version of the model used to generate this sentence."
+                    }
+                }
+            }
+        },
+        "parameters": {
+            "genreParam": {
+                "name": "genre",
+                "description": "The sentence genre.",
+                "in": "path",
+                "required": true,
+                "schema": {
+                    "type": "string",
+                    "enum": ["scifi", "horror"]
+                }
+            }
+        }
+    },
+    "paths": {
+        "/sentences/{genre}": {
+            "get": {
+                "operationId": "getSentences",
+                "description": "Get a list of generated sentences by genre.",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/genreParam"
+                    },
+                    {
+                        "name": "ns",
+                        "description": "Number of samples to get.",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Sentence object.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/sentence"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Genre not found."
+                    }
+                }
+            }
+        },
+        "/sentences/rating/": {
+            "get": {
+                "operationId": "getRatings",
+                "description": "List sentences based on their rating.",
+                "responses": {
+                    "200": {
+                        "description": "List of sentences.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/sentence"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "operationId": "rateSentence",
+                "description": "Rate the quality of a sentence. The criteria for rating is subjective.",
+                "requestBody": {
+                    "required": true,
+                    "description": "Object defining the sentence and the rating.",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/rating"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "OK."
+                    },
+                    "404": {
+                        "description": "Sentence does not exist in database."
+                    }
+                }
+            }
+        }
+    }
+}

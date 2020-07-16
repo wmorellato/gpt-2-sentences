@@ -1,5 +1,8 @@
+# db
+local.db
+
 # Model files
-application/sentences/assets/scifi_checkpoint
+/assets/scifi_checkpoint
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

@@ -1,39 +1,42 @@
-"""Models"""
-from .. import db
+from datetime import datetime
+from sqlalchemy import Column, Integer, String, Text, DateTime, ForeignKey
+from ..database import Base
 
-class Genre(db.Model):
+class Genre(Base):
     """Model for genres of stories used to generate
     sentences"""
 
     __tablename__ = 'genres'
 
-    id = db.Column(
-        db.Integer,
-        primary_key=True
-    )
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    name = Column(String(16), index=True, unique=True)
 
-    name = db.Column(
-        db.String(16),
-        primary_key=True,
-        index=True,
-        unique=True
-    )
+    def __repr__(self):
+        return '<Genre {}>'.format(self.name)
 
-class Sentence(db.Model):
+class Sentence(Base):
     """Data model for sentences"""
 
     __tablename__ = 'sentences'
 
-    id = db.Column(
-        db.Integer,
-        primary_key=True
-    )
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    text = Column(Text)
+    genre = Column(Integer, ForeignKey('genres.id'), index=True)
+    created = Column(DateTime, default=datetime.now)
+    rating = Column(Integer)
+    modelVersion = Column(Integer)
 
-    content = db.Column(
-        db.Text
-    )
+    def to_dict(self, **kwargs):
+        sentence_dict = {
+            'id': self.id,
+            'text': self.text,
+            'genre': kwargs.get('genre') or self.genre,
+            'created': self.created,
+            'rating': self.rating,
+            'modelVersion': self.modelVersion
+        }
 
-    genre = db.Column(
-        db.Integer,
-        db.ForeignKey('genres.id')
-    )
+        return sentence_dict
+
+    def __repr__(self):
+        return '<Sentence, "{}...", genre: {}, created: {}, model: {}, rating: {}>'.format(self.text[:10], self.genre, self.created, self.modelVersion, self.rating)
