@@ -94,7 +94,6 @@ The configuration file [gpt_models.json](gpt_models.json) enables you to easily 
         "num_samples": 5,
         "url": "https://drive.google.com/uc?id=brandNewModel"
     },
-    {
     "fantasy": {
         "version": 1,
         "num_samples": 5,
@@ -105,7 +104,7 @@ The configuration file [gpt_models.json](gpt_models.json) enables you to easily 
 
 ## Providing custom models
 
-> :warning: **Read this if you want to use your owm models.**
+> :warning: **Read this if you want to use your own models.**
 
 I used this Google Colab [Notebook](https://colab.research.google.com/drive/1VLG8e7YSEwypxU-noRNhsv5dW4NfTGce), also provided by [gpt-2-simple](https://github.com/minimaxir/gpt-2-simple), to train the model using a GPU. After training, you can save a checkpoint to your Google Drive archived in a tar file. The tar file has the structure below:
 
