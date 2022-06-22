@@ -23,7 +23,7 @@ Keras-Applications==1.0.8
 Keras-Preprocessing==1.1.2
 Markdown==3.2.2
 MarkupSafe==1.1.1
-numpy==1.19.0
+numpy==1.22.0
 opt-einsum==3.2.1
 protobuf==3.12.2
 PySocks==1.7.1
